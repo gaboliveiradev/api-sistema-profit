@@ -16,6 +16,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable(false);
             $table->string('phone', 11)->nullable(false);
+            $table->foreignId('id_gym')->references('id')->on('gyms');
             $table->enum('profile', ['desenvolvedor', 'proprietário', 'professor', 'aluno'])->nullable(false);
             $table->text('avatar_url')->nullable();
             $table->enum('gender', ['M', 'F'])->nullable(false);
