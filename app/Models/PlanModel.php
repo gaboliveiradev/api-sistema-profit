@@ -12,6 +12,7 @@ class PlanModel extends Model
     protected $table = 'plans';
 
     protected $fillable = [
+        'id_gym',
         'description',
         'days',
         'price',

@@ -10,7 +10,7 @@ class PlanController extends Controller
 {
     public function index() 
     {
-        $plans = PlanModel::all();
+        $plans = PlanModel::orderBy('created_at', 'desc')->get();
 
         return response()->json($plans, 200);
     }
@@ -18,6 +18,7 @@ class PlanController extends Controller
     public function store(Request $request) 
     {
         $request->validate([
+            'id_gym' => 'required|integer',
             'description' => 'required|string',
             'days' => 'required|string',
             'price' => 'required|string',
@@ -36,5 +37,20 @@ class PlanController extends Controller
         DB::commit();
 
         return response()->json($plans, 201);
+    }
+
+    public function destroy($id)
+    {
+        $plan = PlanModel::find($id)->whereNull('deleted_at');
+
+        if ($plan === null) {
+            return response()->json(['mensagem' => 'Plano não encontrado.'], 404);
+        }
+
+        $plan->update([
+            'deleted_at' => DB::raw('now()')
+        ]);
+
+        return response()->json(['mensagem' => 'Plano excluído com sucesso'], 200);
     }
 }

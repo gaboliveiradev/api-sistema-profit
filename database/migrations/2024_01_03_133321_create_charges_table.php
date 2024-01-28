@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::create('charges', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('id_gym')->references('id')->on('gyms');
             $table->foreignId('id_user')->references('id')->on('users');
             $table->foreignId('id_plan')->references('id')->on('plans');
             $table->date('billing_date')->nullable(false);

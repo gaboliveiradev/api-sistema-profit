@@ -12,6 +12,7 @@ class ChargeModel extends Model
     protected $table = 'charges';
 
     protected $fillable = [
+        'id_gym',
         'id_user',
         'id_plan',
         'billing_date',
