@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('plans', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_gym')->references('id')->on('gyms');
-            $table->string('description')->nullable(false);
+            $table->text('description')->nullable(false);
             $table->integer('days')->nullable(false);
             $table->double('price')->nullable(false);
             $table->timestamps();

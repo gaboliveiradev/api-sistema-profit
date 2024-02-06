@@ -10,21 +10,21 @@ return new class extends Migration
     {
         Schema::create('gyms', function (Blueprint $table) {
             $table->id();
-            $table->string('legal_name')->nullable(false);
-            $table->string('fantasy_name')->nullable(false);
-            $table->string('email')->nullable(false);
-            $table->string('phone')->nullable(false);
+            $table->text('legal_name')->nullable(false);
+            $table->text('fantasy_name')->nullable(false);
+            $table->text('email')->nullable(false);
+            $table->text('phone')->nullable(false);
             $table->string('cnpj', 14)->nullable(false);
             $table->text('logo_url')->nullable();
-            $table->string('primary_color')->nullable();
-            $table->string('secondary_color')->nullable();
+            $table->text('primary_color')->nullable();
+            $table->text('secondary_color')->nullable();
             $table->string('zip_code', 8)->nullable(false);
-            $table->string('street')->nullable(false);
-            $table->string('district')->nullable(false);
-            $table->string('number')->nullable(false);
-            $table->string('city')->nullable(false);
-            $table->string('state')->nullable(false);
-            $table->string('complement')->nullable();
+            $table->text('street')->nullable(false);
+            $table->text('district')->nullable(false);
+            $table->text('number')->nullable(false);
+            $table->text('city')->nullable(false);
+            $table->text('state')->nullable(false);
+            $table->text('complement')->nullable();
             $table->timestamps();
             $table->timestamp('deleted_at')->nullable();
         });
