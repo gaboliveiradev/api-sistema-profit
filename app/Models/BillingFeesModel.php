@@ -14,6 +14,7 @@ class BillingFeesModel extends Model
     protected $fillable = [
         'id_gym',
         'identification',
+        'flag',
         'type',
         'percentage',
         'deleted_at'

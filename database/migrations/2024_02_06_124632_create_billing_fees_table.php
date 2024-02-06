@@ -11,6 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('id_gym')->references('id')->on('gyms');
             $table->text('identification');
+            $table->text('flag')->nullable();
             $table->text('type');
             $table->text('percentage');
             $table->timestamps();

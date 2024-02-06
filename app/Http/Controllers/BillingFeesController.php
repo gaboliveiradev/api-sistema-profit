@@ -20,6 +20,7 @@ class BillingFeesController extends Controller
         $request->validate([
             'id_gym' => 'required|integer',
             'identification' => 'required',
+            'type' => 'required',
             'percentage' => 'required',
         ]);
 
