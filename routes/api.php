@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BillingFeesController;
 use App\Http\Controllers\PlanController;
 use Illuminate\Support\Facades\Route;
 
@@ -10,6 +11,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::apiResources([
         '/plans' => PlanController::class,
+        '/billing-fees' => BillingFeesController::class,
     ]);
 });
 
