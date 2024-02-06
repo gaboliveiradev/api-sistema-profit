@@ -41,10 +41,14 @@ class PlanController extends Controller
 
     public function destroy($id)
     {
-        $plan = PlanModel::find($id)->whereNull('deleted_at');
+        $plan = PlanModel::find($id);
 
         if ($plan === null) {
             return response()->json(['mensagem' => 'Plano não encontrado.'], 404);
+        }
+
+        if ($plan->deleted_at !== null) {
+            return response()->json(['mensagem' => 'Plano já deletado.'], 404);
         }
 
         $plan->update([
