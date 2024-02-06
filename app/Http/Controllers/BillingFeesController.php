@@ -2,11 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BillingFeesModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class BillingFeesController extends Controller
 {
+    public function index()
+    {
+        $billingsFees = BillingFeesModel::whereNull('deleted_at')->orderBy('created_at', 'desc')->get();
+        
+        return response()->json($billingsFees, 200);
+    }
+
     public function store(Request $request) 
     {
         $request->validate([
@@ -18,7 +26,7 @@ class BillingFeesController extends Controller
         DB::beginTransaction();
 
         try {
-            $billingFees = BillingFeesController::create($request->all());
+            $billingFees = BillingFeesModel::create($request->all());
         } catch (\Throwable $e) {
             DB::rollBack();
 

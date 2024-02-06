@@ -10,7 +10,7 @@ class PlanController extends Controller
 {
     public function index() 
     {
-        $plans = PlanModel::orderBy('created_at', 'desc')->get();
+        $plans = PlanModel::whereNull('deleted_at')->orderBy('created_at', 'desc')->get();
 
         return response()->json($plans, 200);
     }
