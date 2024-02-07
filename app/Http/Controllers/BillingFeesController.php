@@ -10,9 +10,9 @@ class BillingFeesController extends Controller
 {
     public function index()
     {
-        $billingsFees = BillingFeesModel::whereNull('deleted_at')->orderBy('created_at', 'desc')->get();
+        $billingfees = BillingFeesModel::whereNull('deleted_at')->orderBy('created_at', 'desc')->get();
         
-        return response()->json($billingsFees, 200);
+        return response()->json($billingfees, 200);
     }
 
     public function store(Request $request) 
@@ -27,7 +27,7 @@ class BillingFeesController extends Controller
         DB::beginTransaction();
 
         try {
-            $billingFees = BillingFeesModel::create($request->all());
+            $billingfees = BillingFeesModel::create($request->all());
         } catch (\Throwable $e) {
             DB::rollBack();
 
@@ -36,6 +36,25 @@ class BillingFeesController extends Controller
 
         DB::commit();
 
-        return response()->json($billingFees, 201);
+        return response()->json($billingfees, 201);
+    }
+
+    public function destroy($id)
+    {
+        $billingfees = BillingFeesModel::find($id);
+
+        if ($billingfees === null) {
+            return response()->json(['mensagem' => 'Taxa de Cobrança não encontrada.'], 404);
+        }
+
+        if ($billingfees->deleted_at !== null) {
+            return response()->json(['mensagem' => 'Taxa de Cobrança já deletada.'], 404);
+        }
+
+        $billingfees->update([
+            'deleted_at' => DB::raw('now()')
+        ]);
+
+        return response()->json(['mensagem' => 'Taxa de cobrança excluída com sucesso'], 200);
     }
 }
