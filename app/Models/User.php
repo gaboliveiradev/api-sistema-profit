@@ -29,13 +29,6 @@ class User extends Authenticatable
         'height',
         'weight',
         'observation',
-        'zip_code',
-        'street',
-        'district',
-        'number',
-        'city',
-        'state',
-        'complement',
         'deleted_at',
     ];
 
