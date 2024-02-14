@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BillingModel;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -23,7 +24,19 @@ class UserController extends Controller
         DB::beginTransaction();
 
         try {
-            $user = User::create($request->all());
+            $user = User::create($request->except([
+                'deleted_at'
+            ]));
+
+            BillingModel::create([
+                'id_user' => $user->id,
+                'id_plan' => $request->get('id_plan'),
+                'billing_date' => $request->get('billing_date'),
+                'payment_date' => $request->get('payment_date'),
+                'payment_method' => $request->get('payment_method'),
+                'amount_paid' => $request->get('amount_paid'),
+                'amount_received' => $request->get('amount_received'),
+            ]);
         } catch (\Throwable $e) {
             DB::rollBack();
 

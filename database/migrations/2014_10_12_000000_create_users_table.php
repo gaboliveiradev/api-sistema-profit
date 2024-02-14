@@ -25,6 +25,13 @@ return new class extends Migration
             $table->text('birthday')->nullable(false);
             $table->text('height')->nullable();
             $table->text('weight')->nullable();
+            $table->string('zip_code', 8)->nullable();
+            $table->text('street')->nullable();
+            $table->text('district')->nullable();
+            $table->text('number')->nullable();
+            $table->text('city')->nullable();
+            $table->text('state')->nullable();
+            $table->text('complement')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->timestamp('deleted_at')->nullable();
