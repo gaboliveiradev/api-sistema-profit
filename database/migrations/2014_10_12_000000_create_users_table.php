@@ -25,6 +25,7 @@ return new class extends Migration
             $table->text('birthday')->nullable(false);
             $table->text('height')->nullable();
             $table->text('weight')->nullable();
+            $table->text('observation')->nullable();
             $table->string('zip_code', 8)->nullable();
             $table->text('street')->nullable();
             $table->text('district')->nullable();

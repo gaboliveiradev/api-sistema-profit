@@ -20,6 +20,7 @@ class User extends Authenticatable
         'email',
         'password',
         'phone',
+        'id_gym',
         'profile',
         'avatar_url',
         'gender',
