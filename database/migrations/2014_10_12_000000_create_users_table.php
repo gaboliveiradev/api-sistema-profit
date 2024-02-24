@@ -4,19 +4,18 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('id_gym')->references('id')->on('gyms');
             $table->text('first_name')->nullable(false);
             $table->text('last_name')->nullable(false);
             $table->string('email')->unique()->nullable(false);
             $table->timestamp('email_verified_at')->nullable();
             $table->text('password')->nullable(false);
             $table->text('phone')->nullable(false);
-            $table->foreignId('id_gym')->references('id')->on('gyms');
             $table->enum('profile', ['desenvolvedor', 'proprietário', 'professor', 'aluno'])->nullable(false);
             $table->text('avatar_url')->nullable();
             $table->enum('gender', ['M', 'F'])->nullable(false);

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('id_plan')->references('id')->on('plans');
             $table->date('billing_date')->nullable(false);
             $table->date('payment_date')->nullable();
-            $table->enum('payment_method', ['money', 'pix', 'credit_card', 'debit_card'])->nullable();
+            $table->text('payment_method')->nullable();
             $table->double('amount_paid')->nullable();
             $table->double('amount_received')->nullable();
             $table->timestamps();
