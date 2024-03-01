@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->timestamp('email_verified_at')->nullable();
             $table->text('password')->nullable(false);
             $table->text('phone')->nullable(false);
-            $table->enum('profile', ['desenvolvedor', 'proprietário', 'professor', 'aluno'])->nullable(false);
+            $table->integer('profile')->nullable(false);
             $table->text('avatar_url')->nullable();
             $table->enum('gender', ['M', 'F'])->nullable(false);
             $table->string('cpf', 11)->unique()->nullable(false);

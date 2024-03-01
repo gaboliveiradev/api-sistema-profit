@@ -2,12 +2,13 @@
 
 namespace Database\Seeders;
 
+use App\Domains\User\TypesUserDomain;
 use App\Models\AddressModel;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class UserSeeder extends Seeder
+class UserSeeder extends Seeder implements TypesUserDomain
 {
     public function run(): void
     {
@@ -18,7 +19,7 @@ class UserSeeder extends Seeder
             'password'=> bcrypt('123456'),
             'phone' => '14981062041',
             'id_gym' => 1,
-            'profile' => 'desenvolvedor',
+            'profile' => self::TYPE_USER_DEVELOPER,
             'gender' => 'M',
             'cpf' => '54424309860',
             'rg' => '643637679',
@@ -39,7 +40,7 @@ class UserSeeder extends Seeder
             'password'=> bcrypt('123456'),
             'phone' => '14981985681',
             'id_gym' => 1,
-            'profile' => 'proprietário',
+            'profile' => self::TYPE_USER_ADMINISTRATOR,
             'gender' => 'M',
             'cpf' => '68898387414',
             'rg' => '873881226',

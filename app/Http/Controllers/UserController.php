@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Domains\User\TypesUserDomain;
 use App\Mail\WelcomeMail;
 use App\Models\BillingModel;
 use App\Models\User;
@@ -9,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
-class UserController extends Controller
+class UserController extends Controller implements TypesUserDomain
 {
     private function sendEmail($idUser)
     {
@@ -18,7 +19,12 @@ class UserController extends Controller
         Mail::to($user->email)->send(new WelcomeMail($user));
     }
 
-    public function store(Request $request)
+    public function storeGymGoer(Request $request) 
+    {
+        return $this->store($request, self::TYPE_USER_GYMGOER);
+    }
+
+    private function store(Request $request, $profile)
     {
         $request->validate([
             'first_name' => 'required',
@@ -40,7 +46,7 @@ class UserController extends Controller
                 'password' => bcrypt('123456'),
                 'phone' => $request->get('phone'),
                 'id_gym' => $request->get('id_gym'),
-                'profile' => 'aluno',
+                'profile' => $profile,
                 'gender' => $request->get('gender'),
                 'cpf' => $request->get('cpf'),
                 'birthday' => $request->get('birthday'),
@@ -61,10 +67,21 @@ class UserController extends Controller
                 'id_user' => $user->id,
                 'id_plan' => $request->get('id_plan'),
                 'billing_date' => $request->get('billing_date'),
-                'payment_date' => $request->get('payment_date'),
+                'payment_date' => $request->get('billing_date'),
                 'payment_method' => $request->get('payment_method'),
                 'amount_paid' => $request->get('amount_paid'),
                 'amount_received' => $request->get('amount_received'),
+            ]);
+
+            $date = new \DateTime($request->get('billing_date'));
+            $date->modify('+30 days');
+            $dateNextBilling = $date->format('Y-m-d');
+
+            BillingModel::create([
+                'id_gym' => $request->get('id_gym'),
+                'id_user' => $user->id,
+                'id_plan' => $request->get('id_plan'),
+                'billing_date' => $dateNextBilling,
             ]);
         } catch (\Throwable $e) {
             DB::rollBack();

@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Domains\User\TypesUserDomain;
 use App\Models\GymModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class AuthController extends Controller
+class AuthController extends Controller implements TypesUserDomain
 {
     public function login(Request $request)
     {
@@ -25,7 +26,7 @@ class AuthController extends Controller
 
         $user = Auth::user();
 
-        if ($user->profile !== 'desenvolvedor' && $user->profile !== 'proprietário') {
+        if ($user->profile !== self::TYPE_USER_DEVELOPER && $user->profile !== self::TYPE_USER_ADMINISTRATOR) {
             return response(['errors' => 'Usuário e/ou senha inválido(s)'], 422);
         }
 
