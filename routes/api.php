@@ -11,6 +11,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::post('/user/gym-goer', [UserController::class, 'storeGymGoer']);
+    Route::get('/user/gym-goer', [UserController::class, 'indexGymGoer']);
 
     Route::apiResources([
         '/plans' => PlanController::class,

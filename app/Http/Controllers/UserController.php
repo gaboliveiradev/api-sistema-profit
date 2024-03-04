@@ -7,6 +7,7 @@ use App\Mail\WelcomeMail;
 use App\Models\BillingModel;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
@@ -22,6 +23,33 @@ class UserController extends Controller implements TypesUserDomain
     public function storeGymGoer(Request $request) 
     {
         return $this->store($request, self::TYPE_USER_GYMGOER);
+    }
+
+    public function indexGymGoer()
+    {
+        return $this->index(self::TYPE_USER_GYMGOER);
+    }
+
+    private function index($profile)
+    {
+        $idGymAuthUser = Auth::user()->id_gym;
+
+        $users = User::whereNull('deleted_at')
+        ->where('profile', '=', $profile)
+        ->where('id_gym', '=', $idGymAuthUser)
+        ->get();
+
+        foreach ($users as $user) {
+            $billing = BillingModel::whereNull('billings.deleted_at')
+            ->select('billings.*')
+            ->leftJoin('plans', 'plans.id', '=', 'billings.id_plan')
+            ->where('billings.id_user', '=', $user->id)
+            ->get();
+
+            $user->billings = $billing;
+        }
+
+        return response()->json($users, 200);
     }
 
     private function store(Request $request, $profile)
