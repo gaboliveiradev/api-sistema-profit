@@ -20,7 +20,7 @@ class UserController extends Controller implements TypesUserDomain
         Mail::to($user->email)->send(new WelcomeMail($user));
     }
 
-    public function storeGymGoer(Request $request) 
+    public function storeGymGoer(Request $request)
     {
         return $this->store($request, self::TYPE_USER_GYMGOER);
     }
@@ -35,18 +35,19 @@ class UserController extends Controller implements TypesUserDomain
         $idGymAuthUser = Auth::user()->id_gym;
 
         $users = User::whereNull('deleted_at')
-        ->where('profile', '=', $profile)
-        ->where('id_gym', '=', $idGymAuthUser)
-        ->get();
-
-        foreach ($users as $user) {
-            $billing = BillingModel::whereNull('billings.deleted_at')
-            ->select('billings.*')
-            ->leftJoin('plans', 'plans.id', '=', 'billings.id_plan')
-            ->where('billings.id_user', '=', $user->id)
+            ->where('profile', '=', $profile)
+            ->where('id_gym', '=', $idGymAuthUser)
             ->get();
 
-            $user->billings = $billing;
+        foreach ($users as $user) {
+            $currentBilling = BillingModel::whereNull('billings.deleted_at')
+                ->select('billings.*')
+                ->leftJoin('plans', 'plans.id', '=', 'billings.id_plan')
+                ->where('billings.id_user', '=', $user->id)
+                ->whereBetween('billings.billing_date', [$this->getFirstDayOfTheMonth(), $this->getLastDayOfTheMonth()]) // Substitua $dataInicial e $dataFinal pelos valores desejados
+                ->first();
+
+            $user->currentBillings = $currentBilling;
         }
 
         return response()->json($users, 200);
@@ -108,7 +109,6 @@ class UserController extends Controller implements TypesUserDomain
             BillingModel::create([
                 'id_gym' => $request->get('id_gym'),
                 'id_user' => $user->id,
-                'id_plan' => $request->get('id_plan'),
                 'billing_date' => $dateNextBilling,
             ]);
         } catch (\Throwable $e) {
