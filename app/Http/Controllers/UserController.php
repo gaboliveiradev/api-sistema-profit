@@ -119,7 +119,7 @@ class UserController extends Controller implements TypesUserDomain
 
         DB::commit();
 
-        $this->sendEmail($user->id);
+        //$this->sendEmail($user->id);
 
         return response()->json($user, 201);
     }
