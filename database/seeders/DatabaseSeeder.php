@@ -16,7 +16,6 @@ class DatabaseSeeder extends Seeder
             GymSeeder::class,
             UserSeeder::class,
             ModuleSeeder::class
-            //PlanSeeder::class,
         ]);
     }
 }

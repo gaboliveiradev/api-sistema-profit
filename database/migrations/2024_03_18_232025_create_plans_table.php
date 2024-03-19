@@ -6,19 +6,24 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
         Schema::create('plans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_gym')->references('id')->on('gyms');
-            $table->text('description')->nullable(false);
-            $table->integer('days')->nullable(false);
-            $table->double('price')->nullable(false);
+            $table->foreignId('id_business_partner');
+            $table->foreign('id_business_partner')->references('id')->on('business_partners');
+            $table->text('name')->nullable();
             $table->timestamps();
             $table->timestamp('deleted_at')->nullable();
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
         Schema::dropIfExists('plans');
