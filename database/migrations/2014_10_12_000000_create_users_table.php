@@ -9,29 +9,21 @@ return new class extends Migration {
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_gym')->references('id')->on('gyms');
-            $table->text('first_name')->nullable(false);
-            $table->text('last_name')->nullable(false);
-            $table->string('email')->unique()->nullable(false);
+            $table->text('first_name');
+            $table->text('last_name')->nullable();
+            $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->text('password')->nullable(false);
-            $table->text('phone')->nullable(false);
-            $table->integer('profile')->nullable(false);
+            $table->text('password');
+            $table->text('phone')->nullable();
+            $table->integer('type');
             $table->text('avatar_url')->nullable();
-            $table->enum('gender', ['M', 'F'])->nullable(false);
+            $table->enum('gender', ['M', 'F']);
             $table->string('cpf', 11)->unique()->nullable(false);
             $table->string('rg')->unique()->nullable();
-            $table->text('birthday')->nullable(false);
+            $table->text('birthday');
             $table->text('height')->nullable();
             $table->text('weight')->nullable();
             $table->text('observation')->nullable();
-            $table->string('zip_code', 8)->nullable();
-            $table->text('street')->nullable();
-            $table->text('district')->nullable();
-            $table->text('number')->nullable();
-            $table->text('city')->nullable();
-            $table->text('state')->nullable();
-            $table->text('complement')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->timestamp('deleted_at')->nullable();

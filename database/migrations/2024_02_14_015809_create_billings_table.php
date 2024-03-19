@@ -9,7 +9,7 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    /*public function up(): void
     {
         Schema::create('billings', function (Blueprint $table) {
             $table->id();
@@ -27,7 +27,7 @@ return new class extends Migration
             $table->timestamps();
             $table->timestamp('deleted_at')->nullable();
         });
-    }
+    }*/
 
     /**
      * Reverse the migrations.

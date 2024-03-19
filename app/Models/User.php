@@ -20,8 +20,7 @@ class User extends Authenticatable
         'email',
         'password',
         'phone',
-        'id_gym',
-        'profile',
+        'type',
         'avatar_url',
         'gender',
         'cpf',
@@ -30,13 +29,6 @@ class User extends Authenticatable
         'height',
         'weight',
         'observation',
-        'zip_code',
-        'street',
-        'district',
-        'number',
-        'city',
-        'state',
-        'complement',
         'deleted_at',
     ];
 
