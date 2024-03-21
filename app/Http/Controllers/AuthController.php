@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Domains\User\TypesUserDomain;
+use App\Models\BusinessPartner;
 use App\Models\GymModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,7 +27,7 @@ class AuthController extends Controller implements TypesUserDomain
 
         $user = Auth::user();
 
-        if ($user->profile !== self::TYPE_USER_DEVELOPER && $user->profile !== self::TYPE_USER_ADMINISTRATOR) {
+        if ($user->type !== self::TYPE_USER_DEVELOPER && $user->type !== self::TYPE_USER_ADMINISTRATOR) {
             return response(['errors' => 'Usuário e/ou senha inválido(s)'], 422);
         }
 
@@ -34,13 +35,10 @@ class AuthController extends Controller implements TypesUserDomain
             return response(['errors' => 'Usuário e/ou senha inválido(s)'], 422);
         }
 
-        $token = $user->createToken(env('APP_NAME'), [$user->profile])->plainTextToken;
-
-        $gym = GymModel::where('id', $user->id_gym)->first();
+        $token = $user->createToken(env('APP_NAME'), [$user->type])->plainTextToken;
 
         return response([
             'user' => $user,
-            'gym' => $gym,
             'token' => $token,
         ]);
     }
