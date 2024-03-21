@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BillingController;
 use App\Http\Controllers\BillingFeesController;
 use App\Http\Controllers\PlanController;
+use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,6 +18,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/income/monthly', [BillingController::class, 'getStaticsInfoForCard']);
 
     Route::apiResources([
+        '/services' => ServiceController::class,
         '/plans' => PlanController::class,
         '/billing-fees' => BillingFeesController::class,
     ]);
