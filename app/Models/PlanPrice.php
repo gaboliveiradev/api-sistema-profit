@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PlanFrequency extends Model
+class PlanPrice extends Model
 {
     use HasFactory;
 
-    protected $table = 'plans_frequency';
+    protected $table = 'plans_prices';
 
     protected $fillable = [
         'id_plan',

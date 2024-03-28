@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Definitions\Service;
+namespace App\Definitions\Plan;
 
 interface ServiceDefinition
 {

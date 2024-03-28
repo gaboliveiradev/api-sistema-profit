@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Definitions\Service\ServiceDefinition;
-use App\Domains\Service\ServiceDomain;
+use App\Definitions\Plan\ServiceDefinition;
+use App\Domains\Plan\ServiceDomain;
 
 class ServiceController extends Controller implements ServiceDomain, ServiceDefinition
 {

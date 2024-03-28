@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domains\Modality;
+namespace App\Domains\Plan;
 
 interface ModalityDomain
 {

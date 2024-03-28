@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Definitions\Modality;
+namespace App\Definitions\Plan;
 
 interface ModalityDefinition
 {

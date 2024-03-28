@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domains\Service;
+namespace App\Domains\Plan;
 
 interface ServiceDomain
 {
