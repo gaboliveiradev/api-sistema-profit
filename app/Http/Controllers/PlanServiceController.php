@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Definitions\Plan\ServiceDefinition;
 use App\Domains\Plan\ServiceDomain;
 
-class ServiceController extends Controller implements ServiceDomain, ServiceDefinition
+class PlanServiceController extends Controller implements ServiceDomain, ServiceDefinition
 {
     public function index()
     {

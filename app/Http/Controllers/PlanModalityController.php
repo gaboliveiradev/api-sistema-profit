@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Definitions\Plan\ModalityDefinition;
 use App\Domains\Plan\ModalityDomain;
-use Illuminate\Http\Request;
 
-class ModalityController extends Controller implements ModalityDomain, ModalityDefinition
+class PlanModalityController extends Controller implements ModalityDomain, ModalityDefinition
 {
     public function index()
     {

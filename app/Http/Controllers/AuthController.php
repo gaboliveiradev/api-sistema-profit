@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Domains\User\TypesUserDomain;
 use App\Models\BusinessPartner;
-use App\Models\GymModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -37,8 +36,15 @@ class AuthController extends Controller implements TypesUserDomain
 
         $token = $user->createToken(env('APP_NAME'), [$user->type])->plainTextToken;
 
+        $businessPartners = BusinessPartner::whereNull('business_partners.deleted_at')
+        ->select('business_partners.*')
+        ->leftJoin('business_partners_users', 'business_partners_users.id_business_partner', '=', 'business_partners.id')
+        ->where('business_partners_users.id_user', '=', $user->id)
+        ->first();
+
         return response([
             'user' => $user,
+            'businessPartners' => $businessPartners,
             'token' => $token,
         ]);
     }
