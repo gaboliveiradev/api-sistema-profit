@@ -34,23 +34,23 @@ class PlanController extends Controller
                 'name' => $request->get('name'),    
             ]);
 
-            $idsServices = !empty($request->get('services')) ? $request->get('services') : [];
+            $services = !empty($request->get('services')) ? $request->get('services') : [];
 
-            foreach ($idsServices as $idService) {
+            foreach ($services as $service) {
                 PlanService::create([
                     'id_plan' => $plan->id,
-                    'id_service' => $idService
+                    'id_service' => $service['id']
                 ]);
             }
 
-            $idsModalities = !empty($request->get('modalities')) ? $request->get('modalities') : [];
+            $modalities = !empty($request->get('modalities')) ? $request->get('modalities') : [];
 
-            foreach ($idsModalities as $idModality) {
+            foreach ($modalities as $modality) {
                 PlanModality::create([
                     'id_plan' => $plan->id,
-                    'id_modality' => $idModality,
+                    'id_modality' => $modality['id'],
                     'period' => 1,
-                    'days' => 6,    
+                    'days' => $modality['days'],    
                 ]);
             }
 
