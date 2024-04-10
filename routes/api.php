@@ -8,6 +8,7 @@ use App\Http\Controllers\PlanModalityController;
 use App\Http\Controllers\PlanPriceController;
 use App\Http\Controllers\PlanServiceController;
 use App\Http\Controllers\UserController;
+use App\Models\Plan;
 use Illuminate\Support\Facades\Route;
 
 
@@ -18,6 +19,9 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/user/gym-goer', [UserController::class, 'indexGymGoer']);
 
     Route::get('/income/monthly', [BillingController::class, 'getStaticsInfoForCard']);
+
+    // =======@ PLANOS @=======
+    Route::get('/plans/{idBussinessPartners}', [PlanController::class, 'index']);
 
     Route::apiResources([
         '/frequency' => PlanPriceController::class,

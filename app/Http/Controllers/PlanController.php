@@ -12,12 +12,38 @@ use Illuminate\Support\Facades\DB;
 
 class PlanController extends Controller
 {
-    /*public function index() 
+    public function index($idBussinessPartners) 
     {
-        $plans = PlanModel::whereNull('deleted_at')->orderBy('created_at', 'desc')->get();
+        $plans = Plan::whereNull('deleted_at')
+        ->select('id', 'name')
+        ->where('id_business_partner', '=', $idBussinessPartners)
+        ->get();
+
+        foreach ($plans as $plan) {
+            $modalities = PlanModality::whereNull('deleted_at')
+            ->select('id_modality', 'period', 'days')
+            ->where('id_plan', '=', $plan->id)
+            ->get();
+
+            $plan->modalities = $modalities;
+
+            $services = PlanService::whereNull('deleted_at')
+            ->select('id_service')
+            ->where('id_plan', '=', $plan->id)
+            ->get();
+
+            $plan->services = $services;
+
+            $prices = PlanPrice::whereNull('deleted_at')
+            ->select('period', 'price')
+            ->where('id_plan', '=', $plan->id)
+            ->get();
+
+            $plan->prices = $prices;
+        }
 
         return response()->json($plans, 200);
-    }*/
+    }
 
     public function store(Request $request) 
     {

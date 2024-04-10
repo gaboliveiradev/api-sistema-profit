@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('period');
             $table->double('price');
             $table->timestamps();
+            $table->timestamp('deleted_at')->nullable();
         });
     }
 
