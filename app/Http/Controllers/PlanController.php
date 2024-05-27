@@ -18,71 +18,148 @@ use Illuminate\Support\Facades\DB;
 
 class PlanController extends Controller implements ModalityDomain, ModalityDefinition, ServiceDomain, ServiceDefinition, PriceDomain, PriceDefinition
 {
-    public function index($idBussinessPartners) 
+    public function show($idBussinessPartners, $idPlan)
+    {
+        $plan = Plan::whereNull('deleted_at')
+            ->select('id', 'name')
+            ->where('id_business_partner', '=', $idBussinessPartners)
+            ->where('id', '=', $idPlan)
+            ->first();
+
+        $modalities = PlanModality::whereNull('deleted_at')
+            ->select(
+                'id_modality',
+                'period',
+                'days',
+                DB::raw(
+                    ' CASE ' .
+                        ' WHEN id_modality = ' . self::MODALITY_ID_GENERAL . ' THEN "' . self::MODALITY_NAME_GENERAL . '" ' .
+                        ' WHEN id_modality = ' . self::MODALITY_ID_BODYBUILDING . ' THEN "' . self::MODALITY_NAME_BODYBUILDING . '" ' .
+                        ' WHEN id_modality = ' . self::MODALITY_ID_CROSSFIT . ' THEN "' . self::MODALITY_NAME_CROSSFIT . '" ' .
+                        ' WHEN id_modality = ' . self::MODALITY_ID_FUNCTIONAL . ' THEN "' . self::MODALITY_NAME_FUNCTIONAL . '" ' .
+                        ' END as modality_name '
+                )
+            )
+            ->where('id_plan', '=', $idPlan)
+            ->get();
+
+        $plan->modalities = $modalities;
+
+        $services = PlanService::whereNull('deleted_at')
+            ->select(
+                'id_service',
+                DB::raw(
+                    ' CASE ' .
+                        ' WHEN id_service = ' . self::SERVICE_ID_CABINET . ' THEN "' . self::SERVICE_NAME_CABINET . '" ' .
+                        ' WHEN id_service = ' . self::SERVICE_ID_NUTRITIONIST . ' THEN "' . self::SERVICE_NAME_NUTRITIONIST . '" ' .
+                        ' WHEN id_service = ' . self::SERVICE_ID_PARKING . ' THEN "' . self::SERVICE_NAME_PARKING . '" ' .
+                        ' WHEN id_service = ' . self::SERVICE_ID_PHYSICAL_ASSESSMENT . ' THEN "' . self::SERVICE_NAME_PHYSICAL_ASSESSMENT . '" ' .
+                        ' END as service_name '
+                )
+            )
+            ->where('id_plan', '=', $idPlan)
+            ->get();
+
+        $plan->services = $services;
+
+        $prices = PlanPrice::whereNull('deleted_at')
+            ->select(
+                'period',
+                'price',
+                DB::raw(
+                    ' CASE ' .
+                        ' WHEN period = ' . self::FREQUENCY_ID_MONTHLY . ' THEN "' . self::FREQUENCY_NAME_MONTHLY . '" ' .
+                        ' WHEN period = ' . self::FREQUENCY_ID_BIMONTHLY . ' THEN "' . self::FREQUENCY_NAME_BIMONTHLY . '" ' .
+                        ' WHEN period = ' . self::FREQUENCY_ID_QUARTERLY . ' THEN "' . self::FREQUENCY_NAME_QUARTERLY . '" ' .
+                        ' WHEN period = ' . self::FREQUENCY_ID_SEMESTER . ' THEN "' . self::FREQUENCY_NAME_SEMESTER . '" ' .
+                        ' WHEN period = ' . self::FREQUENCY_ID_YEARLY . ' THEN "' . self::FREQUENCY_NAME_YEARLY . '" ' .
+                        ' END as period_name '
+                )
+            )
+            ->where('id_plan', '=', $idPlan)
+            ->get();
+
+        $plan->prices = $prices;
+
+        return response()->json([
+            'title' => 'Sucesso !',
+            'msg' => 'Dados carregado com sucesso !',
+            'obj' => $plan,
+        ], 200);
+    }
+
+    public function index($idBussinessPartners)
     {
         $plans = Plan::whereNull('deleted_at')
-        ->select('id', 'name')
-        ->where('id_business_partner', '=', $idBussinessPartners)
-        ->get();
+            ->select('id', 'name')
+            ->where('id_business_partner', '=', $idBussinessPartners)
+            ->get();
 
         foreach ($plans as $plan) {
             $modalities = PlanModality::whereNull('deleted_at')
-            ->select(
-                'id_modality', 'period', 'days',
-                DB::raw(
-                    ' CASE '.
-                        ' WHEN id_modality = '.self::MODALITY_ID_GENERAL.' THEN "'.self::MODALITY_NAME_GENERAL.'" '.
-                        ' WHEN id_modality = '.self::MODALITY_ID_BODYBUILDING.' THEN "'.self::MODALITY_NAME_BODYBUILDING.'" '.
-                        ' WHEN id_modality = '.self::MODALITY_ID_CROSSFIT.' THEN "'.self::MODALITY_NAME_CROSSFIT.'" '.
-                        ' WHEN id_modality = '.self::MODALITY_ID_FUNCTIONAL.' THEN "'.self::MODALITY_NAME_FUNCTIONAL.'" '.
-                    ' END as modality_name '
+                ->select(
+                    'id_modality',
+                    'period',
+                    'days',
+                    DB::raw(
+                        ' CASE ' .
+                            ' WHEN id_modality = ' . self::MODALITY_ID_GENERAL . ' THEN "' . self::MODALITY_NAME_GENERAL . '" ' .
+                            ' WHEN id_modality = ' . self::MODALITY_ID_BODYBUILDING . ' THEN "' . self::MODALITY_NAME_BODYBUILDING . '" ' .
+                            ' WHEN id_modality = ' . self::MODALITY_ID_CROSSFIT . ' THEN "' . self::MODALITY_NAME_CROSSFIT . '" ' .
+                            ' WHEN id_modality = ' . self::MODALITY_ID_FUNCTIONAL . ' THEN "' . self::MODALITY_NAME_FUNCTIONAL . '" ' .
+                            ' END as modality_name '
+                    )
                 )
-            )
-            ->where('id_plan', '=', $plan->id)
-            ->get();
+                ->where('id_plan', '=', $plan->id)
+                ->get();
 
             $plan->modalities = $modalities;
 
             $services = PlanService::whereNull('deleted_at')
-            ->select(
-                'id_service',
-                DB::raw(
-                    ' CASE '.
-                        ' WHEN id_service = '.self::SERVICE_ID_CABINET.' THEN "'.self::SERVICE_NAME_CABINET.'" '.
-                        ' WHEN id_service = '.self::SERVICE_ID_NUTRITIONIST.' THEN "'.self::SERVICE_NAME_NUTRITIONIST.'" '.
-                        ' WHEN id_service = '.self::SERVICE_ID_PARKING.' THEN "'.self::SERVICE_NAME_PARKING.'" '.
-                        ' WHEN id_service = '.self::SERVICE_ID_PHYSICAL_ASSESSMENT.' THEN "'.self::SERVICE_NAME_PHYSICAL_ASSESSMENT.'" '.
-                    ' END as service_name '
+                ->select(
+                    'id_service',
+                    DB::raw(
+                        ' CASE ' .
+                            ' WHEN id_service = ' . self::SERVICE_ID_CABINET . ' THEN "' . self::SERVICE_NAME_CABINET . '" ' .
+                            ' WHEN id_service = ' . self::SERVICE_ID_NUTRITIONIST . ' THEN "' . self::SERVICE_NAME_NUTRITIONIST . '" ' .
+                            ' WHEN id_service = ' . self::SERVICE_ID_PARKING . ' THEN "' . self::SERVICE_NAME_PARKING . '" ' .
+                            ' WHEN id_service = ' . self::SERVICE_ID_PHYSICAL_ASSESSMENT . ' THEN "' . self::SERVICE_NAME_PHYSICAL_ASSESSMENT . '" ' .
+                            ' END as service_name '
+                    )
                 )
-            )
-            ->where('id_plan', '=', $plan->id)
-            ->get();
+                ->where('id_plan', '=', $plan->id)
+                ->get();
 
             $plan->services = $services;
 
             $prices = PlanPrice::whereNull('deleted_at')
-            ->select(
-                'period', 'price',
-                DB::raw(
-                    ' CASE '.
-                        ' WHEN period = '.self::FREQUENCY_ID_MONTHLY.' THEN "'.self::FREQUENCY_NAME_MONTHLY.'" '.
-                        ' WHEN period = '.self::FREQUENCY_ID_BIMONTHLY.' THEN "'.self::FREQUENCY_NAME_BIMONTHLY.'" '.
-                        ' WHEN period = '.self::FREQUENCY_ID_QUARTERLY.' THEN "'.self::FREQUENCY_NAME_QUARTERLY.'" '.
-                        ' WHEN period = '.self::FREQUENCY_ID_SEMESTER.' THEN "'.self::FREQUENCY_NAME_SEMESTER.'" '.
-                        ' WHEN period = '.self::FREQUENCY_ID_YEARLY.' THEN "'.self::FREQUENCY_NAME_YEARLY.'" '.
-                    ' END as period_name '
+                ->select(
+                    'period',
+                    'price',
+                    DB::raw(
+                        ' CASE ' .
+                            ' WHEN period = ' . self::FREQUENCY_ID_MONTHLY . ' THEN "' . self::FREQUENCY_NAME_MONTHLY . '" ' .
+                            ' WHEN period = ' . self::FREQUENCY_ID_BIMONTHLY . ' THEN "' . self::FREQUENCY_NAME_BIMONTHLY . '" ' .
+                            ' WHEN period = ' . self::FREQUENCY_ID_QUARTERLY . ' THEN "' . self::FREQUENCY_NAME_QUARTERLY . '" ' .
+                            ' WHEN period = ' . self::FREQUENCY_ID_SEMESTER . ' THEN "' . self::FREQUENCY_NAME_SEMESTER . '" ' .
+                            ' WHEN period = ' . self::FREQUENCY_ID_YEARLY . ' THEN "' . self::FREQUENCY_NAME_YEARLY . '" ' .
+                            ' END as period_name '
+                    )
                 )
-            )
-            ->where('id_plan', '=', $plan->id)
-            ->get();
+                ->where('id_plan', '=', $plan->id)
+                ->get();
 
             $plan->prices = $prices;
         }
 
-        return response()->json($plans, 200);
+        return response()->json([
+            'title' => 'Sucesso !',
+            'msg' => 'Dados carregado com sucesso !',
+            'obj' => $plans,
+        ], 200);
     }
 
-    public function store(Request $request) 
+    public function store(Request $request)
     {
         $request->validate([
             'id_business_partners' => 'required|integer',
@@ -94,7 +171,7 @@ class PlanController extends Controller implements ModalityDomain, ModalityDefin
         try {
             $plan = Plan::create([
                 'id_business_partner' => $request->get('id_business_partners'),
-                'name' => $request->get('name'),    
+                'name' => $request->get('name'),
             ]);
 
             $services = !empty($request->get('services')) ? $request->get('services') : [];
@@ -113,7 +190,7 @@ class PlanController extends Controller implements ModalityDomain, ModalityDefin
                     'id_plan' => $plan->id,
                     'id_modality' => $modality['id'],
                     'period' => 1,
-                    'days' => $modality['days'],    
+                    'days' => $modality['days'],
                 ]);
             }
 
@@ -126,7 +203,6 @@ class PlanController extends Controller implements ModalityDomain, ModalityDefin
                     'price' => $price['value'],
                 ]);
             }
-
         } catch (\Throwable $e) {
             DB::rollBack();
 

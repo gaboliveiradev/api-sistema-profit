@@ -22,6 +22,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
     // =======@ PLANOS @=======
     Route::get('/plans/{idBussinessPartners}', [PlanController::class, 'index']);
+    Route::get('/plans/{idBussinessPartners}/{idPlan}', [PlanController::class, 'show']);
 
     Route::apiResources([
         '/frequency' => PlanPriceController::class,
